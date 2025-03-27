@@ -1,6 +1,6 @@
 /******************************************************************
  *
- *   YOUR NAME / SECTION NUMBER
+ *   Will Bales / 002
  *
  *   Note, additional comments provided throughout this source code
  *   is for educational purposes
@@ -246,11 +246,36 @@ public class CuckooHash<K, V> {
 
  	public void put(K key, V value) {
 
-		// ADD YOUR CODE HERE - DO NOT FORGET TO ADD YOUR NAME AT TOP OF FILE.
-		// Also make sure you read this method's prologue above, it should help
-		// you. Especially the two HINTS in the prologue.
+    // If the key is already in the table, return
+    if (get(key) != null && get(key).equals(value)) return;
 
-		return;
+    // Insert the key-value pair
+    int pos = hash1(key);
+
+    // Begin a for loop to iterate through the table to find an empty bucket
+    for (int i = 0; i < CAPACITY; i++) {
+
+      // If the bucket is empty, insert the key-value pair and return
+      if (table[pos] == null) {
+        table[pos] = new Bucket<K, V>(key, value);
+        return;
+      }
+      // If the bucket is not empty, swap the key-value pair and rehash
+      Bucket<K, V> temp = table[pos];
+      table[pos] = new Bucket<K, V>(key, value);
+      key = temp.getBucKey();
+      value = temp.getValue();
+      
+      // Determine the next position to insert the key-value pair
+      if(hash1(key) == pos) pos = hash2(key);
+      else pos = hash1(key);
+
+    }
+    // If the loop completes, rehash and reinsert the key-value pair and
+    // recursively call the put method
+    rehash();
+    put(key, value);
+		
 	}
 
 
@@ -353,4 +378,3 @@ public class CuckooHash<K, V> {
 	}
 
 }
-
