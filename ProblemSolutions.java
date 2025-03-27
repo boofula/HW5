@@ -1,6 +1,6 @@
 /******************************************************************
  *
- *   YOUR NAME / SECTION NUMBER
+ *   Will Bales / 002
  *
  *   This java file contains the problem solutions of isSubSet, findKthLargest,
  *   and sort2Arrays methods. You should utilize the Java Collection Framework for
@@ -16,7 +16,7 @@ class ProblemSolutions {
      * Method: isSubset()
      *
      * Given two arrays of integers, A and B, return whether
-     * array B is a subset if array A. Example:
+     * array B is a subset of array A. Example:
      *      Input: [1,50,55,80,90], [55,90]
      *      Output: true
      *      Input: [1,50,55,80,90], [55,90, 99]
@@ -30,11 +30,28 @@ class ProblemSolutions {
      * @return      - returns boolean value B is a subset of A.
      */
 
+
     public boolean isSubset(int list1[], int list2[]) {
 
-        // ADD YOU CODE HERE -- DON'T FORGET TO ADD YOR NAME AT TOP OF FILE
+        // Create an integer hash set to store the elements of list1
+        Set <Integer> set = new HashSet<Integer>();
 
-        return false;
+        // Add the elements of list1 to the hash set using a for loop
+        for (int i = 0; i < list1.length; i++) {
+            set.add(list1[i]);
+        }
+
+        // Check if the elements of list2 are contained in the hash set
+        for (int i = 0; i < list2.length; i++) {
+            // If the element is not contained in the hash set, return false
+            // because list2 is not a subset of list1
+            if (!set.contains(list2[i])) {
+                return false;
+            }
+        }
+
+        // If all the elements of list2 are contained in the hash set, return true
+        return true;
     }
 
 
@@ -53,9 +70,24 @@ class ProblemSolutions {
 
     public int findKthLargest(int[] array, int k) {
 
-        // ADD YOUR CODE HERE
+        // Create a priority queue to store the elements contained in the array
+        PriorityQueue<Integer> pq = new PriorityQueue<Integer>();
 
-        return 0;
+        // Add the elements of the array to the priority queue using a for loop
+        for (int i = 0; i < array.length; i++) {
+            // Add the elements to the prioriy queue
+            // since the priority queue is a min heap, the smallest element will be at the top
+            pq.add(array[i]);
+
+            // If the size of the priority queue is greater than k,
+            // remove the smalles element from the priority queue
+            if (pq.size() > k) {
+                pq.poll();
+            }
+        }
+
+        // From this process pq.peek() will return the kth largest element in the array
+        return pq.peek();
     }
 
 
@@ -74,9 +106,37 @@ class ProblemSolutions {
 
     public int[] sort2Arrays(int[] array1, int[] array2) {
 
-        // ADD YOU CODE HERE
+        // Create a new array to store the elements of array1 and array2
+        int[] result = new int[array1.length + array2.length];
 
-        return null;
+        // Copy the elements of array1 to the result array
+        for (int i = 0; i < array1.length; i++) {
+            result[i] = array1[i];
+        }
+
+        // Copy the elements of array2 to the rest of the result array
+        for (int i = array1.length; i < result.length; i++) {
+            result[i] = array2[i - array1.length];
+        }
+
+        // Create a priority queue to store the elements of the result array
+        PriorityQueue<Integer> pq = new PriorityQueue<Integer>();
+
+        // Add the elements of the result array to the priority queue
+        // since the priority queue is a min heap, the smallest element will be at the top
+        for (int i = 0; i < result.length; i++) {
+            pq.add(result[i]);
+        }
+
+        // Create an index variable to store the index of the result array
+        int index = 0;
+        // Slowly remove the elements from the priority queue and add them to the result array
+        while(!pq.isEmpty()) {
+            result[index++] = pq.poll();
+        }
+
+        // Return the sorted result array
+        return result;
     }
 
 }
